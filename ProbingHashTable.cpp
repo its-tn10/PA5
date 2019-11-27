@@ -4,8 +4,6 @@
 #include <string>
 #include <iostream>
 
-// TODO: Also make insertions increment value by one if existing
-
 // constructor (NOTE: graders will use a default constructor for testing)
 ProbingHashTable::ProbingHashTable() {
 	this->capacity = 100000;
@@ -21,12 +19,15 @@ void ProbingHashTable::insert(std::string key, int val) {
 	int i = 0;
 	while (i < this->capacity) {
 		int j = (this->hash(key) + i) % this->capacity;
+		if (this->table[j].first == key) { // Existing element, increment by val
+			this->table[j].second += val;
+			return;
+		}
 		if (this->table[j].first == "" && this->table[j].second == 0) {
 			this->table[j] = make_pair(key, val);
 			this->size += 1;
 			return;
 		}
-
 		i += 1;
 	}
 	// full

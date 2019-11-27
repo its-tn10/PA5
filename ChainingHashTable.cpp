@@ -8,7 +8,7 @@
 
 // constructor (NOTE: graders will use a default constructor for testing)
 ChainingHashTable::ChainingHashTable() {
-	this->capacity = 50000;
+	this->capacity = 60000;
 	this->table.resize(this->capacity);
 }
 

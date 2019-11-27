@@ -1,6 +1,9 @@
 #ifndef DOUBLEHASHING_H
 #define DOUBLEHASHING_H
 
+#include <utility>
+#include <string>
+
 #include "HashTable.h"
 
 
@@ -11,7 +14,8 @@ class DoubleHashTable : public HashTable {
     int secondHash(std::string s);
 
     // TODO: insert additional variables here
-    
+    std::pair<std::string, int> *table;
+
     public: 
     DoubleHashTable();
     ~DoubleHashTable(); 
