@@ -8,7 +8,7 @@
 
 // constructor (NOTE: graders will use a default constructor for testing)
 ChainingHashTable::ChainingHashTable() {
-	this->capacity = 60000;
+	this->capacity = 60000; // Update data structure to proper size
 	this->table.resize(this->capacity);
 }
 
@@ -19,7 +19,7 @@ ChainingHashTable::~ChainingHashTable() {
 // inserts the given string key
 void ChainingHashTable::insert(std::string key, int val) {
 	std::list<std::pair<std::string, int>>::iterator it;
-	for (it = this->table.at(this->hash(key)).begin(); it != this->table.at(this->hash(key)).end(); ++it) {
+	for (it = this->table.at(this->hash(key)).begin(); it != this->table.at(this->hash(key)).end(); ++it) { // Going through each element in list
 		if ((*it).first == key) { // Found an existing key, just increment the value
 			(*it).second += val;
 			return;
@@ -36,14 +36,14 @@ int ChainingHashTable::remove(std::string key) {
 	std::list<std::pair<std::string, int>>::iterator it;
 	int rtnVal = -1;
 	for (it = this->table.at(this->hash(key)).begin(); it != this->table.at(this->hash(key)).end(); ++it) {
-		if ((*it).first == key) {
+		if ((*it).first == key) { // Going through each element in list to find correct key
 			rtnVal = (*it).second;
 			this->table.at(this->hash(key)).erase(it);
 			this->size -= 1;
 			return rtnVal;
 		}
 	}
-	throw std::runtime_error("Key not found");
+	return -1; // Not found
 }
 
 // getter to obtain the value associated with the given key
@@ -53,7 +53,7 @@ int ChainingHashTable::get(std::string key) {
 		if ((*it).first == key)
 			return (*it).second;
 	}
-	return 0;
+	return -1; // Not found
 }
 
 // prints number of occurrances for all given strings to a txt file

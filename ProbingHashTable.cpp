@@ -6,7 +6,7 @@
 
 // constructor (NOTE: graders will use a default constructor for testing)
 ProbingHashTable::ProbingHashTable() {
-	this->capacity = 100000;
+	this->capacity = 100000; // Update data structure to proper size
 	this->table = new std::pair<std::string, int>[this->capacity];
 }
 
@@ -16,14 +16,14 @@ ProbingHashTable::~ProbingHashTable() {
 
 // inserts the given string key
 void ProbingHashTable::insert(std::string key, int val) {
-	int i = 0;
+	int i = 0, hash = this->hash(key);
 	while (i < this->capacity) {
-		int j = (this->hash(key) + i) % this->capacity;
+		int j = (hash + i) % this->capacity;
 		if (this->table[j].first == key) { // Existing element, increment by val
 			this->table[j].second += val;
 			return;
 		}
-		if (this->table[j].first == "" && this->table[j].second == 0) {
+		if (this->table[j].first == "" && this->table[j].second == 0) { // Default values for NULL or empty pair
 			this->table[j] = make_pair(key, val);
 			this->size += 1;
 			return;
@@ -35,27 +35,31 @@ void ProbingHashTable::insert(std::string key, int val) {
 
 // removes the given key from the hash table - if the key is not in the list, throw an error
 int ProbingHashTable::remove(std::string key) {
-	int p = this->get(key);
-	if (this->table[p].first != "" && this->table[p].second != 0) {
-		this->table[p].first = "";
-		this->table[p].second = 0;
-		this->size -= 1;
-	} else {
-		throw std::runtime_error("key not found");
+	int i = 0, hash = this->hash(key), j = hash, p = -1;
+	while (i < this->capacity) {
+		j = (hash + i) % this->capacity;
+		if (this->table[j].first == key) {
+			p = this->table[j].second;
+			this->table[j].first = "";
+			this->table[j].second = 0;
+			this->size -= 1;
+			return p;
+		}
+		i += 1;
 	}
-	return p;
+	return -1; // Not found
 }
 
 // getter to obtain the value associated with the given key
 int ProbingHashTable::get(std::string key) {
-	int i = 0, j = this->hash(key);
-	while (i < this->capacity && this->table[j].first == "" && this->table[j].second == 0) {
-		j = (this->hash(key) + i) % this->capacity;
+	int i = 0, hash = this->hash(key), j = hash;
+	while (i < this->capacity) {
+		j = (hash + i) % this->capacity;
 		if (this->table[j].first == key)
-			return j;
+			return this->table[j].second;
 		i += 1;
 	}
-	return -1;
+	return -1; // Not found
 }
 
 // prints number of occurrances for all given strings to a txt file
